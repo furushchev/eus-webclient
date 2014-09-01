@@ -8,33 +8,34 @@ module.exports = function(server){
   var maxEusClient = 5;
   var currentConnection = 0;
 
-  var stdoutHandler = function(data){
-    socket.emit('eusout', {
-      'time' : Date.now(),
-      'message': "" + data
-    });
-    console.log('send stdout: ' + data);
-  };
-
-  var stderrHandler = function(data){
-    socket.emit('euserr', {
-      'time': Date.now(),
-      'message': "" + data
-    });
-    console.log('send stderr: ' + data);
-  };
-
-  var shutdownHandler = function(code){
-    console.log('process exited(' + code + ')');
-    socket.emit('euserr', {
-      'time': Date.now(),
-      'message': "process exited.(" + code + ")"
-    });
-    currentConnection--;
-  });
-
   io.sockets.on('connection', function(socket){
     var roseus = null;
+
+      var stdoutHandler = function(data){
+	  socket.emit('eusout', {
+	      'time' : Date.now(),
+	      'message': "" + data
+	  });
+	  console.log('send stdout: ' + data);
+      };
+
+      var stderrHandler = function(data){
+	  socket.emit('euserr', {
+	      'time': Date.now(),
+	      'message': "" + data
+	  });
+	  console.log('send stderr: ' + data);
+      };
+
+      var shutdownHandler = function(code){
+	  console.log('process exited(' + code + ')');
+	  socket.emit('euserr', {
+	      'time': Date.now(),
+	      'message': "process exited.(" + code + ")"
+	  });
+	  currentConnection--;
+      };
+
     if(currentConnection >= maxEusClient) {
       console.log('max client error');
       socket.emit('error', {
