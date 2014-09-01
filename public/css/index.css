@@ -1,0 +1,15 @@
+fieldset.column {
+    display: block;
+    height: 100%;
+    width: 50%;
+}
+
+fieldset.left {
+    position: absolute;
+    left: -5px;
+}
+
+fieldset.right {
+    position: absolute;
+    right: -5px;
+}
