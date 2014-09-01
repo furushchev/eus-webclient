@@ -8,6 +8,31 @@ module.exports = function(server){
   var maxEusClient = 5;
   var currentConnection = 0;
 
+  var stdoutHandler = function(data){
+    socket.emit('eusout', {
+      'time' : Date.now(),
+      'message': "" + data
+    });
+    console.log('send stdout: ' + data);
+  };
+
+  var stderrHandler = function(data){
+    socket.emit('euserr', {
+      'time': Date.now(),
+      'message': "" + data
+    });
+    console.log('send stderr: ' + data);
+  };
+
+  var shutdownHandler = function(code){
+    console.log('process exited(' + code + ')');
+    socket.emit('euserr', {
+      'time': Date.now(),
+      'message': "process exited.(" + code + ")"
+    });
+    currentConnection--;
+  });
+
   io.sockets.on('connection', function(socket){
     var roseus = null;
     if(currentConnection >= maxEusClient) {
@@ -17,33 +42,8 @@ module.exports = function(server){
         message: "Cannot start eus client more than limits!"
       });
     } else {
-      // start eus
-      roseus = new Eusclient(
-        function(data){
-          // stdout
-          socket.emit('eusout', {
-            'time' : Date.now(),
-            'message': "" + data
-          });
-          console.log('send stdout: ' + data);
-        },
-        function(data){
-          // stderr
-          socket.emit('euserr', {
-            'time': Date.now(),
-            'message': "" + data
-          });
-          console.log('send stderr: ' + data);
-        },
-        function(code){
-          // shutdown eus
-          console.log('process exited(' + code + ')');
-          socket.emit('euserr', {
-            'time': Date.now(),
-            'message': "process exited.(" + code + ")"
-          });
-          currentConnection--;
-        });
+      // start roseus process
+      roseus = new Eusclient(stdoutHandler, stderrHandler, shutdownHandler);
       roseus.run();
       currentConnection++;
       console.log('client started. ' + currentConnection);
@@ -53,6 +53,16 @@ module.exports = function(server){
       console.log('received: ' + util.inspect(data));
       if(roseus != null)
         roseus.command(data.message);
+    });
+
+    socket.on('eusrestart', function(data){
+      if (roseus == null) return;
+      console.log('restarting');
+      roseus.shutdown();
+      roseus = new Eusclient(stdoutHandler, stderrHandler, shutdownHandler);
+      roseus.run();
+      currentConnection++;
+      console.log('roseus restarted.');
     });
 
     socket.on('disconnect', function(){

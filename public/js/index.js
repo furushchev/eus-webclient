@@ -1,7 +1,7 @@
 $(function(){
   var socket = io();
-  
-  $("#send-button").click(function(){
+
+  var sendCommand = function(){
     var textdata = $("#stdin-textarea").val() + '\n';
     console.log('data: ' + textdata);
     socket.emit('eusin', {
@@ -9,6 +9,22 @@ $(function(){
       message: textdata
     });
     $("#stdin-textarea").val("");
+  };
+  
+  $("#send-button").click(sendCommand);
+
+  $("#stdin-textarea").keydown(function(e){
+    if(e.ctrlKey && (e.keyCode == 10 || e.keyCode ==13)) {
+      // Ctrl + Enter
+      e.preventDefault();
+      sendCommand();
+    } else if(e.ctrlKey && e.keyCode == 67) {
+      // Ctrl + C
+      e.preventDefault();
+      socket.emit('eusrestart', {
+        time: Date.now()
+      });
+    }
   });
 
   socket.on('eusout', function(msg){
