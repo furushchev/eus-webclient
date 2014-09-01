@@ -1,23 +1,24 @@
 <% include header %>
 
-<div class="container well">
-  <h1><%-title %></h1>
-  <p>Welcome to <%-title %></p>
-  <div id="content">
-    <fieldset class="column left">
-      <div id="stdout">
-        <textarea id="stdout-textarea" rows="10" cols="40" name="stdout" ></textarea>
-      </div>
-      <div id="stderr">
-        <textarea id="stderr-textarea" rows="10" cols="40" name="stdout" ></textarea>
-      </div>
-    </fieldset>
-    <fieldset class="column right">
-      <div id="stdin">
-        <textarea id="stdin-textarea" rows="10" cols="40" name="stdin"></textarea>
-      </div>
-      <button type="button" id="send-button" class="btn btn-lg btn-primary">Send</button>
-      <iframe src="http://133.11.216.151:8080/" width="640px" height="480px"></iframe>
-    </fieldset>
+<h1><%-title %></h1>
+<p>Welcome to <%-title %></p>
+<div id="content">
+  <fieldset class="column left">
+    <div id="stdout" class="row top">
+      <textarea id="stdout-textarea" name="stdout" ></textarea>
+    </div>
+    <div id="stderr" class="row bottom">
+      <textarea id="stderr-textarea" name="stdout" ></textarea>
+    </div>
+    <textarea id="stdin-textarea" name="stdin"></textarea>
+    <button type="button" id="send-button" class="btn btn-lg btn-primary">Send</button>
+  </fieldset>
+  <fieldset class="column right">
+    <iframe src="http://133.11.216.151:8080/"></iframe>
+  </fieldset>
+  <fieldset class="bottom">
+  </fieldset>
+
+</div>
 <% locals.JS_FILES = ["/js/index.js"]; %>
 <% include footer %>
