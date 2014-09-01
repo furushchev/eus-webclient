@@ -1,5 +1,5 @@
 var spawn = require('child_process').spawn;
-var command = 'python';
+var command = 'roseus';
 
 function Roseus(onStdout, onStderr, onExit){
   this.stdoutCallback = onStdout;
@@ -8,7 +8,7 @@ function Roseus(onStdout, onStderr, onExit){
 }
 
 Roseus.prototype.run = function run(){
-  this.roseus = spawn(command, ['-i'], {
+  this.roseus = spawn(command, [], {
     detached: true,
     env: process.env
   });
