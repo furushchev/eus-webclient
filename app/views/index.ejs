@@ -1,0 +1,22 @@
+<% include header %>
+
+<div class="container well">
+  <h1><%-title %></h1>
+  <p>Welcome to <%-title %></p>
+  <div id="content">
+    <fieldset class="column left">
+      <div id="stdout">
+        <textarea id="stdout-textarea" rows="10" cols="40" name="stdout" ></textarea>
+      </div>
+      <div id="stderr">
+        <textarea id="stderr-textarea" rows="10" cols="40" name="stdout" ></textarea>
+      </div>
+    </fieldset>
+    <fieldset class="column right">
+      <div id="stdin">
+        <textarea id="stdin-textarea" rows="10" cols="40" name="stdin"></textarea>
+      </div>
+      <button type="button" id="send-button" class="btn btn-lg btn-primary">Send</button>
+    </fieldset>
+<% locals.JS_FILES = ["/js/index.js"]; %>
+<% include footer %>
