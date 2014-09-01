@@ -1,5 +1,6 @@
 var spawn = require('child_process').spawn;
-var command = 'roseus';
+var path = require('path');
+var command = 'roseus'; // ' + path.join(__dirname, 'default.l');
 
 function Roseus(onStdout, onStderr, onExit){
   this.stdoutCallback = onStdout;
@@ -18,6 +19,8 @@ Roseus.prototype.run = function run(){
     console.log('error on pid ' + this.roseus.pid + ' :' + err);
   });
   this.roseus.on('exit', this.exitCallback);
+
+    this.roseus.stdin.write('(load "package://hrpsys_ros_bridge_tutorials/euslisp/samplerobot-interface.l") (samplerobot-init)');
 };
 
 Roseus.prototype.shutdown = function shutdown(){
