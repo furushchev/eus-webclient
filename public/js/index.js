@@ -1,6 +1,10 @@
 $(function(){
   var socket = io();
 
+  // scroll to bottom as a default
+  $('#stdout-textarea').scrollTop($('#stdout-textarea')[0].scrollHeight);
+  $('#stderr-textarea').scrollTop($('#stderr-textarea')[0].scrollHeight);
+
   var sendCommand = function(){
     var textdata = $("#stdin-textarea").val() + '\n';
     console.log('data: ' + textdata);
