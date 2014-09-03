@@ -24,7 +24,14 @@ Roseus.prototype.run = function run(){
 };
 
 Roseus.prototype.shutdown = function shutdown(){
-  this.roseus.kill();
+  this.roseus.kill('SIGINT');
+    console.log('sent SIGINT to roseus');
+    setTimeout(function(){
+	if(this.roseus) {
+	    this.roseus.kill();
+	    console.log('escalated to SIGKILL');
+	}
+    }, 10000);
 };
 
 Roseus.prototype.command = function command(data){
